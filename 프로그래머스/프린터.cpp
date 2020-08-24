@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <queue>
 
 using namespace std;
 
@@ -49,4 +50,30 @@ int solution(vector<int> priorities, int location) {
 
 
 	return answer;
+}
+
+int solution2(vector<int> priorities, int location) {
+	int answer = 0;
+
+	queue<int>q;
+	priority_queue<int>pq;
+
+	vector<int>idx(priorities.size());
+	for (int i = 0; i < priorities.size(); i++) {
+		idx[i] = i;
+		q.push(i);
+		pq.push(priorities[i]);
+	}
+
+	while (1) {
+		int num = q.front(); q.pop();
+		if (priorities[num] == pq.top()) {
+			answer++; pq.pop();
+			if (num == location)return answer;
+		}
+		else {
+			q.push(num);
+		}
+	}
+
 }
