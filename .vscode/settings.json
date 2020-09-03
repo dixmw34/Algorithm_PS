@@ -1,7 +1,7 @@
 {
     "files.associations": {
-        "iostream": "cpp",
         "vector": "cpp",
-        "xiosbase": "cpp"
+        "iostream": "cpp",
+        "iosfwd": "cpp"
     }
 }
