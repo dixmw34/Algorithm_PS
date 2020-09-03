@@ -15,3 +15,22 @@ vector<int> solution(int brown, int yellow) {
         }
     }
 }
+
+vector<int> solution2(int brown, int yellow) {
+
+	brown = (brown / 2) + 2;
+	int w, h;
+	if (brown % 2) {
+		w = brown / 2 + 1;
+		h = brown / 2;
+	}
+	else {
+		w = brown / 2;
+		h = brown / 2;
+	}
+
+	while (h) {
+		if ((w - 2)*(h - 2) == yellow)return { w, h };
+		w++; h--;
+	}
+}
