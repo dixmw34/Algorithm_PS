@@ -25,39 +25,13 @@ int dy[] = { 0, 1, 0, -1, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-vector<int>a;
-vector<int>temp;
-ll ans = 0;
-
-void merge(int start, int end) {
-	if (start == end)return;
-
-	int mid = (start + end) / 2;
-
-	merge(start, mid);
-	merge(mid + 1, end);
-
-	int i = start, j = mid + 1, idx = start;
-
-	while (i <= mid || j <= end) {
-		if (i == mid + 1) {
-			temp[idx++] = a[j++];
-		}
-		else if (j == end + 1) {
-			temp[idx++] = a[i++];
-		}
-		else if (a[i] <= a[j]) {
-			temp[idx++] = a[i++];
-		}
-		else {
-			ans += (ll)(mid - i + 1);
-			temp[idx++] = a[j++];
-		}
+int gcd(int a, int b) {
+	while (a%b) {
+		int r = a % b;
+		a = b;
+		b = r;
 	}
-
-	for (int i = start; i <= end; i++) {
-		a[i] = temp[i];
-	}
+	return b;
 }
 
 int main(void) {
@@ -67,13 +41,30 @@ int main(void) {
 
 	int n;
 	cin >> n;
-	a = vector<int>(n);
+
+	vector<int>a(n);
 	for (int i = 0; i < n; ++i)cin >> a[i];
-	temp = vector<int>(n);
+	sort(a.begin(), a.end());
 
-	merge(0, n - 1);
+	int num = a[1] - a[0];
+	for (int i = 2; i < n; ++i) {
+		num = gcd(num, a[i] - a[i - 1]);
+	}
 
-	cout << ans << '\n';
+	priority_queue<int>pq;
+	for (int i = 1; i <= sqrt(num); ++i) {
+		if (num%i == 0) {
+			if (i != 1 && i*i != num)pq.push(-i);
+			pq.push(-(num / i));
+		}
+	}
+
+	while (!pq.empty()) {
+		cout << -pq.top() << ' ';
+		pq.pop();
+	}
+	cout << '\n';
+
 
 	return 0;
 
