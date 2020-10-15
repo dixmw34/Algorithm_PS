@@ -7,7 +7,11 @@
 #include <deque>
 #include <cmath>
 #include <map>
+#include <unordered_map>
 #include <set>
+#include <climits>
+#include <string.h>
+#include <iomanip>
 
 #define INF 987654321
 
@@ -17,71 +21,66 @@ typedef pair<int, int> pi;
 typedef pair<int, pair<int, int>>ppi;
 typedef unsigned int ui;
 typedef long long ll;
+typedef unsigned long long ull;
 
-int dx[] = { -1, 0, 1, 0, -1, -1, 1, 1 };
-int dy[] = { 0, 1, 0, -1, -1, 1, -1, 1 };
+int dx[] = { 0, 0, -1, 1, -1, -1, 1, 1 };
+int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-vector<vector<int>>link(26);
-vector<int>inDegree;
+const int Max = 26;
+int inDegree[26];
+vector<vector<int>>arr(26);
 
 
 int main(void) {
 
 	ios::sync_with_stdio(false);
-	cin.tie(NULL); cout.tie(NULL);
+	cin.tie(NULL); std::cout.tie(NULL);
 
-	int t, n;
-	cin >> t;
-	while (t--) {
+	int c;
+	cin >> c;
+	while (c--) {
+
+		memset(inDegree, 0, sizeof(inDegree));
+		for (int i = 0; i < Max; ++i)arr[i].clear();
+
+		int n;
 		cin >> n;
-		vector<string>a(n);
-		for (int i = 0; i < n; i++) {
-			cin >> a[i];
-		}
-
-		inDegree = vector<int>(26);
-
-		for (int i = 0; i < n-1; i++) {
-			for (int j = 0; j < min(a[i].size(), a[i + 1].size()); j++) {
-				if (a[i][j] != a[i + 1][j]) {
-					link[a[i][j] - 'a'].push_back(a[i + 1][j] - 'a');
-					inDegree[a[i + 1][j] - 'a']++;
+		vector<string>s(n);
+		for (int i = 0; i < n; ++i)cin >> s[i];
+		for (int i = 0; i < n - 1; ++i) {
+			for (int j = 0; j < min(s[i].size(), s[i + 1].size()); ++j) {
+				if (s[i][j] != s[i + 1][j]) {
+					inDegree[s[i + 1][j] - 'a']++;
+					arr[s[i][j]-'a'].push_back(s[i + 1][j] - 'a');
 					break;
 				}
 			}
 		}
-
-		queue<char>ans;
-		queue<int>q;
-		for (int i = 0; i < 26; i++) {
-			if (inDegree[i] == 0)q.push(i);
+		queue<int>q; vector<char>ans;
+		for (int i = 0; i < Max; ++i) {
+			if (inDegree[i] == 0) {
+				q.push(i);
+			}
 		}
 
 		while (!q.empty()) {
 			int num = q.front(); q.pop();
-			ans.push(num + 'a');
-
-			for (int i = 0; i < link[num].size(); i++) {
-				if (--inDegree[link[num][i]] == 0)q.push(link[num][i]);
+			ans.push_back((char)(num + 'a'));
+			for (int i = 0; i < arr[num].size(); ++i) {
+				if (--inDegree[arr[num][i]] == 0)q.push(arr[num][i]);
 			}
 		}
 
-		if (ans.size() == 26) {
-			while (!ans.empty()) {
-				cout << ans.front();
-				ans.pop();
-			}
+		if (ans.size() == Max) {
+			for (int i = 0; i < ans.size(); ++i)cout << ans[i];
 			cout << '\n';
 		}
-		else {
-			cout << "INVALID HYPOTHESIS\n";
-		}
-		for (int i = 0; i < 26; i++) link[i].clear();
-		inDegree.clear();
+		else cout << "INVALID HYPOTHESIS\n";
 	}
 
+	
 
 	return 0;
 

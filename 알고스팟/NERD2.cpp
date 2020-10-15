@@ -28,34 +28,53 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-int a[50];
+map<int, int>m;
+
+bool insert(int x, int y) {
+	map<int, int>::iterator it = m.lower_bound(x);
+	if (it == m.end())return true;
+	return it->second < y;
+}
+void remove(int x, int y) {
+	map<int, int>::iterator it = m.lower_bound(x);
+	if (it == m.begin())return;
+	it--;
+	while (1) {
+		if (it->second < y) {
+			if (it == m.begin()) {
+				m.erase(it);
+				return;
+			}
+			map<int, int>::iterator jt = it;
+			jt--;
+			m.erase(it);
+			it = jt;
+		}
+		else return;
+	}
+}
 
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(NULL); std::cout.tie(NULL);
 
-	int t;
-	cin >> t;
-	while (t--) {
-		int n, plus = 0, minus = 0;
+	int c;
+	cin >> c;
+	while (c--) {
+		int n, a, b, ans = 0;
 		cin >> n;
 		for (int i = 0; i < n; ++i) {
-			cin >> a[i];
-			if (a[i] > 0)plus += a[i];
-			else if (a[i] < 0)minus -= a[i];
+			cin >> a >> b;
+			if (insert(a, b)) {
+				remove(a, b);
+				m.insert(pi(a, b));
+			}
+			ans += m.size();
 		}
-		if (plus == minus) {
-			cout << "NO\n";
-			continue;
-		}
-		cout << "YES\n";
-		sort(a, a + n);
-		if (plus > minus) reverse(a, a + n);
-		for (int i = 0; i < n; ++i)cout << a[i] << ' ';
-		cout << '\n';
+		cout << ans << '\n';
+		m.clear();
 	}
-
 	
 
 	return 0;

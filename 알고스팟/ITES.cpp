@@ -28,34 +28,34 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-int a[50];
+ui signal(ui num) {
+	return num * 214013 + 2531011;
+}
 
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(NULL); std::cout.tie(NULL);
 
-	int t;
-	cin >> t;
-	while (t--) {
-		int n, plus = 0, minus = 0;
-		cin >> n;
+	int c;
+	cin >> c;
+	while (c--) {
+		int k, n, sum = 0, ans = 0;
+		cin >> k >> n;
+		ui seed = 1983;
+		queue<int>q;
 		for (int i = 0; i < n; ++i) {
-			cin >> a[i];
-			if (a[i] > 0)plus += a[i];
-			else if (a[i] < 0)minus -= a[i];
+			if (i != 0)seed = signal(seed);
+			sum += (seed % 10000 + 1);
+			q.push(seed % 10000 + 1);
+			while (!q.empty() && sum > k) {
+				sum -= q.front();
+				q.pop();
+			}
+			if (sum == k)ans++;
 		}
-		if (plus == minus) {
-			cout << "NO\n";
-			continue;
-		}
-		cout << "YES\n";
-		sort(a, a + n);
-		if (plus > minus) reverse(a, a + n);
-		for (int i = 0; i < n; ++i)cout << a[i] << ' ';
-		cout << '\n';
+		cout << ans << '\n';
 	}
-
 	
 
 	return 0;

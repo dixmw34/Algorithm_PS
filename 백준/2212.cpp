@@ -27,35 +27,33 @@ int dx[] = { 0, 0, -1, 1, -1, -1, 1, 1 };
 int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
-
-int a[50];
-
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(NULL); std::cout.tie(NULL);
 
-	int t;
-	cin >> t;
-	while (t--) {
-		int n, plus = 0, minus = 0;
-		cin >> n;
-		for (int i = 0; i < n; ++i) {
-			cin >> a[i];
-			if (a[i] > 0)plus += a[i];
-			else if (a[i] < 0)minus -= a[i];
-		}
-		if (plus == minus) {
-			cout << "NO\n";
-			continue;
-		}
-		cout << "YES\n";
-		sort(a, a + n);
-		if (plus > minus) reverse(a, a + n);
-		for (int i = 0; i < n; ++i)cout << a[i] << ' ';
-		cout << '\n';
+	int n, k;
+	cin >> n >> k;
+	vector<int>a(n);
+	for (int i = 0; i < n; ++i)cin >> a[i];
+
+	if (n <= k) {
+		cout << 0 << '\n';
+		return 0;
 	}
 
+	sort(a.begin(), a.end());
+	priority_queue<int>pq;
+	for (int i = 1; i < n; ++i)pq.push(a[i] - a[i - 1]);
+	k--;
+	while (k--)pq.pop();
+
+	int ans = 0;
+	while (!pq.empty()) {
+		ans += pq.top();
+		pq.pop();
+	}
+	cout << ans << '\n';
 	
 
 	return 0;

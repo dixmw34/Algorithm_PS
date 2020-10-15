@@ -28,34 +28,30 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-int a[50];
-
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(NULL); std::cout.tie(NULL);
 
-	int t;
-	cin >> t;
-	while (t--) {
-		int n, plus = 0, minus = 0;
-		cin >> n;
-		for (int i = 0; i < n; ++i) {
-			cin >> a[i];
-			if (a[i] > 0)plus += a[i];
-			else if (a[i] < 0)minus -= a[i];
+	int n, a[100000], idx = 0;
+	cin >> n;
+	for (int i = 0; i < n; ++i)cin >> a[i];
+
+	stack<int>s; vector<char>ans;
+	for (int i = 0; i < n; ++i) {
+		s.push(i + 1);
+		ans.push_back('+');
+		while (!s.empty() && s.top() == a[idx]) {
+			s.pop();
+			idx++;
+			ans.push_back('-');
 		}
-		if (plus == minus) {
-			cout << "NO\n";
-			continue;
-		}
-		cout << "YES\n";
-		sort(a, a + n);
-		if (plus > minus) reverse(a, a + n);
-		for (int i = 0; i < n; ++i)cout << a[i] << ' ';
-		cout << '\n';
 	}
 
+	if (!s.empty())cout << "NO\n";
+	else {
+		for (int i = 0; i < ans.size(); ++i)cout << ans[i] << '\n';
+	}
 	
 
 	return 0;

@@ -28,35 +28,40 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-int a[50];
+ll dp[55];
+
+ll sol(ll num) {
+	ll test = 0;
+	int i = 0;
+	while (test < num) {
+		test = (test + 1) * 2 - 1;
+		++i;
+	}
+
+	if (test == num) {
+		return dp[i];
+	}
+	else {
+		return dp[i - 1] + (num - (test + 1) / 2 + 1) + sol(num - (test + 1) / 2);
+	}
+}
+
 
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(NULL); std::cout.tie(NULL);
 
-	int t;
-	cin >> t;
-	while (t--) {
-		int n, plus = 0, minus = 0;
-		cin >> n;
-		for (int i = 0; i < n; ++i) {
-			cin >> a[i];
-			if (a[i] > 0)plus += a[i];
-			else if (a[i] < 0)minus -= a[i];
-		}
-		if (plus == minus) {
-			cout << "NO\n";
-			continue;
-		}
-		cout << "YES\n";
-		sort(a, a + n);
-		if (plus > minus) reverse(a, a + n);
-		for (int i = 0; i < n; ++i)cout << a[i] << ' ';
-		cout << '\n';
+	memset(dp, 0, sizeof(dp));
+	ll test = 1;
+	for (int i = 1; i < 55; ++i) {
+		dp[i] = dp[i - 1] * 2 + test;
+		test *= 2;
 	}
 
-	
+	ll a, b;
+	cin >> a >> b;
+	cout << sol(b) - sol(a - 1) << '\n';
 
 	return 0;
 

@@ -28,34 +28,28 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-int a[50];
+int a[100000], cache[100000][2];
 
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(NULL); std::cout.tie(NULL);
 
-	int t;
-	cin >> t;
-	while (t--) {
-		int n, plus = 0, minus = 0;
-		cin >> n;
-		for (int i = 0; i < n; ++i) {
-			cin >> a[i];
-			if (a[i] > 0)plus += a[i];
-			else if (a[i] < 0)minus -= a[i];
-		}
-		if (plus == minus) {
-			cout << "NO\n";
-			continue;
-		}
-		cout << "YES\n";
-		sort(a, a + n);
-		if (plus > minus) reverse(a, a + n);
-		for (int i = 0; i < n; ++i)cout << a[i] << ' ';
-		cout << '\n';
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; ++i)cin >> a[i];
+
+	cache[0][0] = a[0], cache[0][1] = -INF;
+
+	int ans = a[0];
+
+	for (int i = 1; i < n; ++i) {
+		cache[i][0] = max(cache[i - 1][0] + a[i], a[i]);
+		cache[i][1] = max(cache[i - 1][1] + a[i], cache[i - 1][0]);
+		ans = max(ans, max(cache[i][0], cache[i][1]));
 	}
 
+	cout << ans << '\n';
 	
 
 	return 0;

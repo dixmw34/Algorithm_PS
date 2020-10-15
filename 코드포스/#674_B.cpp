@@ -28,8 +28,6 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-int a[50];
-
 int main(void) {
 
 	ios::sync_with_stdio(false);
@@ -38,24 +36,19 @@ int main(void) {
 	int t;
 	cin >> t;
 	while (t--) {
-		int n, plus = 0, minus = 0;
-		cin >> n;
+		int n, m, a[2][2], test = 0;
+		cin >> n >> m;
 		for (int i = 0; i < n; ++i) {
-			cin >> a[i];
-			if (a[i] > 0)plus += a[i];
-			else if (a[i] < 0)minus -= a[i];
+			cin >> a[0][0] >> a[0][1] >> a[1][0] >> a[1][1];
+			if (a[0][1] == a[1][0])test++;
 		}
-		if (plus == minus) {
+		if (m % 2 || test == 0) {
 			cout << "NO\n";
-			continue;
 		}
-		cout << "YES\n";
-		sort(a, a + n);
-		if (plus > minus) reverse(a, a + n);
-		for (int i = 0; i < n; ++i)cout << a[i] << ' ';
-		cout << '\n';
-	}
+		else cout << "YES\n";
 
+
+	}
 	
 
 	return 0;
