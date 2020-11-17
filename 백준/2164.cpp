@@ -33,21 +33,18 @@ int main(void) {
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
-	int n, k, a;
-	cin >> n >> k;
-	vector<int>dp(k + 1, INF);
-	dp[0] = 0;
+	int i = 0, n;
+	cin >> n;
+	queue<int>q;
+	for (int i = 1; i <= n; ++i)q.push(i);
 
-	while (n--) {
-		cin >> a;
-		for (int i = a; i <= k; ++i) {
-			dp[i] = min(dp[i], dp[i - a] + 1);
-		}
+	while (q.size() > 1) {
+		if (i % 2 != 0)q.push(q.front());
+		q.pop();
+		i++;
 	}
 
-	if (dp[k] == INF)cout << -1 << '\n';
-	else cout << dp[k] << '\n';
-
+	cout << q.front() << '\n';
 
 	
 	return 0;

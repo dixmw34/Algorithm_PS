@@ -28,27 +28,33 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
+const int Mod = 1000000003;
+int dp[1001][501];
+
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
-	int n, k, a;
-	cin >> n >> k;
-	vector<int>dp(k + 1, INF);
-	dp[0] = 0;
+	memset(dp, 0, sizeof(dp));
 
-	while (n--) {
-		cin >> a;
-		for (int i = a; i <= k; ++i) {
-			dp[i] = min(dp[i], dp[i - a] + 1);
+	int n, k;
+	cin >> n >> k;
+
+	if (k > (n + 1) / 2) {
+		cout << 0 << '\n';
+		return 0;
+	}
+
+	for (int i = 1; i < n; ++i) {
+		dp[i][0] = 1;
+		dp[i][1] = i;
+		for (int j = 2; j <= (i + 1) / 2; ++j) {
+			dp[i][j] = (dp[i - 1][j] + dp[i - 2][j - 1]) % Mod;
 		}
 	}
 
-	if (dp[k] == INF)cout << -1 << '\n';
-	else cout << dp[k] << '\n';
-
-
+	cout << (dp[n - 2][k] + (dp[n - 3][k - 1] * 2) % Mod) % Mod;
 	
 	return 0;
 

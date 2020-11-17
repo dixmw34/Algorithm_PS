@@ -28,25 +28,40 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
+int sum[101], dp[101][101];
+bool visit[101][101];
+
+int sol(int idx, int cnt) {
+	if (cnt == 0)return 0;
+	if (idx < 0)return -INF;
+	if (visit[idx][cnt])return dp[idx][cnt];
+
+	visit[idx][cnt] = true;
+
+	dp[idx][cnt] = sol(idx - 1, cnt);
+
+	for (int i = idx - 1; i >= 0; --i) {
+		dp[idx][cnt] = max(dp[idx][cnt], sum[idx] - sum[i] + sol(i - 1, cnt - 1));
+	}
+	return dp[idx][cnt];
+}
+
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
-	int n, k, a;
-	cin >> n >> k;
-	vector<int>dp(k + 1, INF);
-	dp[0] = 0;
-
-	while (n--) {
+	sum[0] = 0;
+	int n, m, a;
+	cin >> n >> m;
+	for (int i = 1; i <= n; ++i) {
 		cin >> a;
-		for (int i = a; i <= k; ++i) {
-			dp[i] = min(dp[i], dp[i - a] + 1);
-		}
+		sum[i] = a + sum[i - 1];
 	}
 
-	if (dp[k] == INF)cout << -1 << '\n';
-	else cout << dp[k] << '\n';
+	memset(visit, 0, sizeof(visit));
+
+	cout << sol(n, m) << '\n';
 
 
 	

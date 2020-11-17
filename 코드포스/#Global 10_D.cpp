@@ -28,28 +28,42 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
+
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
-	int n, k, a;
-	cin >> n >> k;
-	vector<int>dp(k + 1, INF);
-	dp[0] = 0;
-
-	while (n--) {
-		cin >> a;
-		for (int i = a; i <= k; ++i) {
-			dp[i] = min(dp[i], dp[i - a] + 1);
+	int t;
+	cin >> t;
+	while (t--) {
+		int n;
+		string s;
+		cin >> n >> s;
+		int cnt = 0, ans = 0;
+		while (!s.empty() && s[0] == s.back()) {
+			s.pop_back();
+			cnt++;
 		}
+		if (s.empty()) {
+			if (n <= 2)cout << 0 << '\n';
+			else cout << (n + 2) / 3 << '\n';
+			continue;
+		}
+		s.push_back('!');
+		for (int i = 0; i < s.size()-1; ++i) {
+			cnt++;
+			if (s[i] != s[i + 1])
+			{
+				ans += cnt / 3;
+				cnt = 0;
+			}
+		}
+		cout << ans << '\n';
+
 	}
 
-	if (dp[k] == INF)cout << -1 << '\n';
-	else cout << dp[k] << '\n';
 
-
-	
 	return 0;
 
 }

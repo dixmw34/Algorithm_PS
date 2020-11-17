@@ -33,21 +33,21 @@ int main(void) {
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
-	int n, k, a;
-	cin >> n >> k;
-	vector<int>dp(k + 1, INF);
-	dp[0] = 0;
-
-	while (n--) {
-		cin >> a;
-		for (int i = a; i <= k; ++i) {
-			dp[i] = min(dp[i], dp[i - a] + 1);
+	int t;
+	cin >> t;
+	while (t--) {
+		int m, n, x, y, ans = -1;
+		cin >> m >> n >> x >> y;
+		y %= n;
+		for (int i = x; i <= m * n; i += m) {
+			if (i%n == y) {
+				ans = i;
+				break;
+			}
 		}
+		cout << ans << '\n';
 	}
-
-	if (dp[k] == INF)cout << -1 << '\n';
-	else cout << dp[k] << '\n';
-
+	
 
 	
 	return 0;

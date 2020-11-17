@@ -28,28 +28,29 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
+vector<int>prime;
+bool is_prime[300001];
+int Max = 300000;
+
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
-	int n, k, a;
-	cin >> n >> k;
-	vector<int>dp(k + 1, INF);
-	dp[0] = 0;
-
-	while (n--) {
-		cin >> a;
-		for (int i = a; i <= k; ++i) {
-			dp[i] = min(dp[i], dp[i - a] + 1);
-		}
+	memset(is_prime, 1, sizeof(is_prime));
+	is_prime[0] = is_prime[1] = false;
+	for (int i = 2; i <= Max; ++i) {
+		if (!is_prime[i])continue;
+		prime.push_back(i);
+		for (int j = 2; i*j <= Max; ++j)is_prime[i*j] = false;
 	}
 
-	if (dp[k] == INF)cout << -1 << '\n';
-	else cout << dp[k] << '\n';
+	int n;
+	while (cin >> n && n != 0) {
+		int ans = upper_bound(prime.begin(), prime.end(), 2 * n) - lower_bound(prime.begin(), prime.end(), n + 1);
+		cout << ans << '\n';
+	}
 
-
-	
 	return 0;
 
 }

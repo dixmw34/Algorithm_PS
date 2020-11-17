@@ -33,21 +33,28 @@ int main(void) {
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
-	int n, k, a;
-	cin >> n >> k;
-	vector<int>dp(k + 1, INF);
-	dp[0] = 0;
+	map<string, int>m1;
+	map<int, string>m2;
 
-	while (n--) {
-		cin >> a;
-		for (int i = a; i <= k; ++i) {
-			dp[i] = min(dp[i], dp[i - a] + 1);
+	int n, q;
+	string s;
+	cin >> n >> q;
+	for (int i = 0; i < n; ++i) {
+		cin >> s;
+		m1.insert(make_pair(s, i));
+		m2.insert(make_pair(i, s));
+	}
+	while (q--) {
+		cin >> s;
+		if (s[0] >= 'A' && s[0] <= 'Z') {
+			cout << m1[s] + 1 << '\n';
+		}
+		else {
+			int num = stoi(s);
+			cout << m2[num-1] << '\n';
 		}
 	}
-
-	if (dp[k] == INF)cout << -1 << '\n';
-	else cout << dp[k] << '\n';
-
+	
 
 	
 	return 0;
