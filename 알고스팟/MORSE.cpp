@@ -28,53 +28,54 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-struct Pack
-{
-	string name;
-	int volume;
-	int value;
-};
+const ll Max = 987654321987654321;
+ll dp[201][101];
 
-int dp[101][1001];
-Pack p[101];
+ll sol(int n, int m) {
+	if (dp[n][m] != -1)return dp[n][m];
+	if (m == 0 || n == m)return dp[n][m] = 1;
+
+	dp[n][m] = min(sol(n - 1, m - 1) + sol(n - 1, m), Max);
+
+	return dp[n][m];
+}
 
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
+	memset(dp, -1, sizeof(dp));
+
 	int t;
 	cin >> t;
 	while (t--) {
-		memset(dp, 0, sizeof(dp));
+		int n, m;
+		ll k;
+		cin >> n >> m >> k;
 
-		int n, w;
-		cin >> n >> w;
-		for (int i = 1; i <= n; ++i) {
-			cin >> p[i].name >> p[i].volume >> p[i].value;
-			for (int j = w; j >= 0; --j) {
-				if (j >= p[i].volume)dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - p[i].volume] + p[i].value);
-				else dp[i][j] = dp[i - 1][j];
+		while (n + m) {
+			if (n == 0) {
+				cout << 'o';
+				m--;
+			}
+			else if (m == 0) {
+				cout << '-';
+				n--;
+			}
+			else {
+				if (k > sol(n + m - 1, n - 1)) {
+					k -= sol(n + m - 1, n - 1);
+					cout << 'o';
+					m--;
+				}
+				else {
+					cout << '-';
+					n--;
+				}
 			}
 		}
-
-		cout << dp[n][w] << ' ';
-
-		stack<string>s;
-		for (int i = n; i > 0; --i) {
-			if (w - p[i].volume >= 0 && dp[i][w] == dp[i - 1][w - p[i].volume] + p[i].value) {
-				s.push(p[i].name);
-				w -= p[i].volume;
-				if (w == 0)break;
-			}
-		}
-
-		cout << s.size() << '\n';
-		while (!s.empty()) {
-			cout << s.top() << '\n';
-			s.pop();
-		}
-
+		cout << '\n';
 	}
 
 	return 0;

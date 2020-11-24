@@ -28,15 +28,6 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-struct Pack
-{
-	string name;
-	int volume;
-	int value;
-};
-
-int dp[101][1001];
-Pack p[101];
 
 int main(void) {
 
@@ -46,36 +37,35 @@ int main(void) {
 	int t;
 	cin >> t;
 	while (t--) {
-		memset(dp, 0, sizeof(dp));
-
-		int n, w;
-		cin >> n >> w;
-		for (int i = 1; i <= n; ++i) {
-			cin >> p[i].name >> p[i].volume >> p[i].value;
-			for (int j = w; j >= 0; --j) {
-				if (j >= p[i].volume)dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - p[i].volume] + p[i].value);
-				else dp[i][j] = dp[i - 1][j];
+		int n, k;
+		string A, B;
+		cin >> n >> k >> A >> B;
+		vector<int>a(26, 0), b(26, 0);
+		for (int i = 0; i < n; ++i) {
+			a[A[i] - 'a']++;
+			b[B[i] - 'a']++;
+		}
+		bool ans = true;
+		for (int i = 0; i < 26; ++i) {
+			if (a[i] < b[i]) {
+				ans = false;
+				break;
+			}
+			else {
+				a[i] -= b[i];
+				if(a[i]%k!=0) {
+					ans = false;
+					break;
+				}
+				if (i != 25)a[i + 1] += a[i];
 			}
 		}
-
-		cout << dp[n][w] << ' ';
-
-		stack<string>s;
-		for (int i = n; i > 0; --i) {
-			if (w - p[i].volume >= 0 && dp[i][w] == dp[i - 1][w - p[i].volume] + p[i].value) {
-				s.push(p[i].name);
-				w -= p[i].volume;
-				if (w == 0)break;
-			}
-		}
-
-		cout << s.size() << '\n';
-		while (!s.empty()) {
-			cout << s.top() << '\n';
-			s.pop();
-		}
+		if (ans)cout << "YES\n";
+		else cout << "NO\n";
 
 	}
+
+	
 
 	return 0;
 }
