@@ -28,16 +28,14 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
-const ll Max = 987654321987654321;
 ll dp[201][101];
 
 ll sol(int n, int m) {
 	if (dp[n][m] != -1)return dp[n][m];
-	if (m == 0 || n == m)return dp[n][m] = 1;
 
-	dp[n][m] = min(sol(n - 1, m - 1) + sol(n - 1, m), Max);
+	if (m == 0 || n == m)return dp[n][m] = 1LL;
 
-	return dp[n][m];
+	else return dp[n][m] = min((ll)INT_MAX, sol(n - 1, m - 1) + sol(n - 1, m));
 }
 
 int main(void) {
@@ -53,21 +51,20 @@ int main(void) {
 		int n, m;
 		ll k;
 		cin >> n >> m >> k;
-
-		while (n + m) {
+		int l = n + m;
+		while (l--) {
 			if (n == 0) {
 				cout << 'o';
-				m--;
 			}
 			else if (m == 0) {
 				cout << '-';
-				n--;
 			}
 			else {
-				if (k > sol(n + m - 1, n - 1)) {
-					k -= sol(n + m - 1, n - 1);
+				ll test = sol(n + m - 1, m);
+				if (test < k) {
 					cout << 'o';
 					m--;
+					k -= test;
 				}
 				else {
 					cout << '-';
@@ -78,5 +75,7 @@ int main(void) {
 		cout << '\n';
 	}
 
+	
+	
 	return 0;
 }
