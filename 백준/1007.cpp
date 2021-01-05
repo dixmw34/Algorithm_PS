@@ -28,57 +28,41 @@ int dy[] = { 1, -1, 0, 0, -1, 1, -1, 1 };
 
 //----------------------------------------------------
 
+pi a[20];
+
 int main(void) {
 
 	ios::sync_with_stdio(false);
 	cin.tie(0); cout.tie(0);
 
-	ll n, m;
-	cin >> n >> m;
-	vector<ll>_time(m);
-	for (int i = 0; i < m; ++i) {
-		cin >> _time[i];
-	}
-
-	if (n <= m) {
-		cout << n << '\n';
-		return 0;
-	}
-	n -= m;
-
-	ll left = 0, right = 2000000000LL * 30LL, ans = 0;
-	while (left <= right) {
-		ll mid = (left + right) / 2;
-		ll test = 0;
-		for (int i = 0; i < m; ++i) {
-			test += mid / _time[i];
+	int t;
+	cin >> t;
+	while (t--) {
+		int n;
+		cin >> n;
+		for (int i = 0; i < n; ++i) {
+			cin >> a[i].first >> a[i].second;
 		}
-		if (test < n) {
-			ans = mid;
-			left = mid + 1;
-		}
-		else {
-			right = mid - 1;
-		}
-	}
+		double ans = INF;
+		vector<bool>v(n, true);
+		for (int i = 0; i < n / 2; ++i)
+			v[i] = false;
 
-	for (int i = 0; i < m; ++i) {
-		n -= ans / _time[i];
-	}
-
-	while (true) {
-		ans++;
-		for (int i = 0; i < m; ++i) {
-			if (ans%_time[i] == 0) {
-				n--;
-				if (n == 0) {
-					cout << i + 1 << '\n';
-					return 0;
+		do {
+			double x = 0, y = 0;
+			for (int i = 0; i < n; ++i) {
+				if (v[i]) {
+					x += a[i].first, y += a[i].second;
+				}
+				else {
+					x -= a[i].first, y -= a[i].second;
 				}
 			}
-		}
-	}
+			ans = min(ans, sqrt(x*x + y * y));
+		} while (next_permutation(v.begin(), v.end()));
 
+		printf("%.10lf\n", ans);
+	}
 
 	return 0;
 }
